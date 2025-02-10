@@ -1,65 +1,36 @@
 # CUDA Challenge
 
 ## Overview
-This repository contains a series of progressively advanced CUDA projects designed to strengthen my understanding of GPU programming and optimization.
+This repository contains a series of progressively advancing CUDA programming tasks designed to strengthen my understanding of GPU programming and optimization focused on Computer Vision and LLMs.
 
-## Sections & Goals
+## Sections
 
-### **1. Quick Revision of CUDA Basics (Project 1)**
-**Goal:** Refresh your CUDA fundamentals and ensure that your development environment is fully functional.
+### **1. CUDA Basics**
+**Goal:** Refresh the CUDA fundamentals and implement basic kernels. Kernel profiling using NSight Compute and NSight Systems.
 
-### **2. CUDA Performance Optimizations (Project 2)**
-**Goal:** Deepen your understanding of memory access patterns and warp-level optimizations.
+### **2. CUDA Performance Optimizations**
+**Goal:** Deepen my understanding of memory access patterns and warp-level optimizations. implement optimized version of kernels and compare performance gains through profiling.
 
-### **3. AI Vision - Custom CUDA Kernels for Image Processing (Project 3)**
-**Goal:** Develop custom kernels for image processing tasks critical to AI vision.
+### **3. Computer Vision - Custom CUDA Kernels for Image Processing**
+**Goal:** Implement custom kernels for image processing tasks.
 
-### **4. AI Vision - Optimized CNN Kernels (Project 4)**
-**Goal:** Create and optimize kernels for key operations in Convolutional Neural Networks (CNNs).
+### **4. Computer Vision - Optimized CNN Kernels (Project 4)**
+**Goal:** Optimize the image processing kernels for key operations in Convolutional Neural Networks (CNNs), Integration with CUDA Graphs and benchmark the performance difference.
 
-### **5. Transformer Optimization - Fast Matrix Multiplication (Project 5)**
-**Goal:** Optimize matrix multiplication—critical to Transformer models—using CUDA and hardware-specific features.
+### **5. Fast Matrix Multiplication**
+**Goal:** Optimize matrix multiplication using hardware-specific features. Utilize Tensor Cores. Test performance scaling.
 
-### **6. Transformer Attention Optimization (Project 6)**
+### **6. Transformer Attention Optimization**
 **Goal:** Develop and optimize kernels for softmax and self-attention mechanisms used in Transformer architectures.
 
-### **7. Sparse Matrix Operations for LLM Efficiency (Project 7)**
+### **7. Sparse Matrix Operations for LLM Efficiency**
 **Goal:** Optimize sparse matrix operations, crucial for large language model (LLM) efficiency.
 
-### **8. Multi-GPU Training & NCCL Optimization (Project 8)**
-**Goal:** Scale your optimizations across multiple GPUs for training large models.
-
-### **9. Model Quantization & TensorRT Optimization (Project 9)**
+### **8. Model Quantization & TensorRT Optimization**
 **Goal:** Optimize models for inference by applying quantization and leveraging TensorRT.
 
-### **10. Final Challenge - Optimizing GPT Model (Project 10)**
-**Goal:** Apply all learned CUDA techniques to optimize a GPT-style model for inference and training efficiency.
+### **9. Optimizing GPT Model**
+**Goal:** Apply all learned CUDA techniques to optimize a GPT-style model for inference and training efficiency. Transformer layers and custom KV-cache implementation.
 
-<!-- ## Getting Started
-
-1. **Clone the repository:**
-   ```sh
-   git clone https://github.com/your_username/cuda-challenge.git
-   cd cuda-challenge
-   ```
-
-2. **Set up your CUDA environment:**
-   Ensure you have:
-   - NVIDIA GPU with CUDA support
-   - CUDA Toolkit installed
-   - Nsight Systems & Compute for profiling
-   - PyTorch (if benchmarking with deep learning models)
-
-3. **Follow the project structure:**
-   Each section has its own folder containing:
-   - CUDA source files (`.cu`)
-   - Supporting CPU implementations (`.cpp`)
-   - Profiling and benchmarking scripts
-   - Documentation on performance improvements
-
-4. **Run the challenges and optimize!**
-   Begin with Project 1 and progressively move towards advanced optimizations.
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. -->
-
+### **10. Multi-GPU Training & NCCL Optimization (Project 8)**
+**Goal:** Scale the  optimizations across multiple GPUs for training large models.
