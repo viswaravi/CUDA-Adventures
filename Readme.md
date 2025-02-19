@@ -1,12 +1,11 @@
-# CUDA Challenge
+# CUDA Adventures
 
 ## Overview
-This repository contains a series of progressively advancing CUDA programming tasks designed to strengthen my understanding of GPU programming and optimization focused on Computer Vision and LLMs.
+This repository contains a series of progressively advancing CUDA programming tasks designed to strengthen my understanding of GPU programming and optimization focused on Computer Vision and LLMs. Work in progress.
 
 ## Sections
-
 ### **1. CUDA Basics**
-**Goal:** Refresh the CUDA fundamentals and implement basic kernels. Kernel profiling using NSight Compute and NSight Systems.
+**Goal:** Refresh the CUDA fundamentals and implement basic vector addition kernels. Kernel profiling using NSight Compute and NSight Systems.
 
 ### **2. CUDA Performance Optimizations**
 **Goal:** Deepen my understanding of memory access patterns and warp-level optimizations. implement optimized version of kernels and compare performance gains through profiling.
