@@ -73,19 +73,20 @@ void printMemoryRequirements(unsigned long long array_len, unsigned long long ch
     long double array_size_gbytes = array_size_bytes / (1024 * 1024 * 1024);
     long double array_size_mbytes = array_size_bytes / (1024 * 1024);
 
-
     std::cout << "---Memory Requirements---" << std::endl;
     std::cout << "Array Length: " << array_len << std::endl;
-    std::cout << "Host Array Memory: " << array_size_gbytes << "GB, " << array_size_mbytes <<"MB" << std::endl;
+    std::cout << "Host Array Memory Size: " << array_size_gbytes << "GB, " << array_size_mbytes <<"MB" << std::endl;
 
+    if (chunk_len > 0)
+    {
+        long double chunk_size_bytes = chunk_len * sizeof(float);
+        long double chunk_size_gbytes = chunk_size_bytes / (1024 * 1024 * 1024);
+        long double chunk_size_mbytes = chunk_size_gbytes / (1024 * 1024);
 
-    long double chunk_size_bytes = chunk_len * sizeof(float);
-    long double chunk_size_gbytes = chunk_size_bytes / (1024 * 1024 * 1024);
-    long double chunk_size_mbytes = chunk_size_gbytes / (1024 * 1024);
-
-    std::cout << "Chunk Length: " << chunk_len << std::endl;
-    std::cout << "GPU  Chunk Per Array Memory: " << chunk_size_gbytes << " GB" << std::endl;
-    std::cout << "GPU  Chunk Total Array Memory: " << chunk_size_gbytes*3 << "GB, " << chunk_size_mbytes*3 << "MB" << std::endl << std::endl;
+        std::cout << "Chunk Length: " << chunk_len << std::endl;
+        std::cout << "GPU  Chunk Per Array Memory: " << chunk_size_gbytes << " GB" << std::endl;
+        std::cout << "GPU  Chunk Total Array Memory: " << chunk_size_gbytes * 3 << "GB, " << chunk_size_mbytes * 3 << "MB" << std::endl << std::endl;
+    }
 }
 
 void printKernelConfig(dim3 grid, dim3 block)
@@ -162,13 +163,19 @@ void printDeviceDetails()
 
     size_t free_mem, total_mem;
 
+
+
     CUDA_CALL(cudaGetDeviceProperties(&prop, deviceId));
     CUDA_CALL(cudaMemGetInfo(&free_mem, nullptr));
 
+    // Convert to MB
+    total_mem = prop.totalGlobalMem / (1024 * 1024);
+    free_mem = free_mem / (1024 * 1024);
+
     printf("Device Name: %s\n", prop.name);
     printf("SM Count: %d\n", prop.multiProcessorCount);
-    printf("Total Global Memory: %zu bytes\n", prop.totalGlobalMem);
-    printf("Current Free Memory: %zu bytes\n", free_mem);
+    printf("Total Global Memory: %zu Mbytes\n", total_mem);
+    printf("Current Free Memory: %zu Mbytes\n", free_mem);
 
     printf("\n---Block Limits---\n");
     printf("Max Threads per Block: %d\n", prop.maxThreadsPerBlock);
@@ -188,8 +195,6 @@ void printDeviceDetails()
 
 void pageableMemoryAddition(unsigned long long array_len)
 {
-    std::srand(std::time(nullptr));
-
     // Host Data
     int* h_A, * h_B, * h_C;
     size_t mem_size = array_len * sizeof(int);
@@ -200,14 +205,14 @@ void pageableMemoryAddition(unsigned long long array_len)
     h_C = (int*)malloc(mem_size);
 
     // Initialize Host Data
-    for (size_t i = 0; i < array_len; ++i)
-    {
-        h_A[i] = 1 + std::rand() % 100;
-        h_B[i] = 1 + std::rand() % 100;
-    }
+    std::fill(h_A, h_A + array_len, 42);
+    std::fill(h_B, h_B + array_len, 38);
+    std::fill(h_C, h_C + array_len, 0);
 
     // Add Vector
     addWithCudaMemSafe(h_C, h_A, h_B, array_len);
+
+    std::cout << "Result: " << h_C[0] << " " << h_C[array_len - 1] << std::endl;
    
     // free host memory
     free(h_A);
@@ -226,9 +231,10 @@ void pinnedMemoryAddition(unsigned long long array_len)
     CUDA_CALL(cudaMallocHost(&h_B, mem_size));
     CUDA_CALL(cudaMallocHost(&h_C, mem_size));
 
-    std::fill(h_A, h_A + array_len, 42);  // Fill with 42
-    std::fill(h_B, h_B + array_len, 38);  // Fill with 38
-    std::fill(h_C, h_C + array_len, 0);   // Fill with 0
+    // Initialize Host Data
+    std::fill(h_A, h_A + array_len, 42);
+    std::fill(h_B, h_B + array_len, 38);
+    std::fill(h_C, h_C + array_len, 0);
 
     std::cout << "Initialized A:" << h_A[0] << "  B:" << h_B[0] << std::endl;
 
@@ -333,7 +339,7 @@ void pageableMemoryAdditionLarge(unsigned long long array_len, float free_mem_th
 
 void streamedVectorAdditionLarge(unsigned long long array_len, float free_mem_threshold = 0.2)
 {
-    const int num_streams = 3;
+    const int num_streams = 4;
     assert(free_mem_threshold <= 1);
 
     // Host Data
@@ -443,13 +449,13 @@ int main()
         switch (option)
         {
         case PageableMemoryVectorAddition:
-            array_len = 1024 * 1024;
+            array_len = 1024 * 1024 * 256;
             printMemoryRequirements(array_len);
             pageableMemoryAddition(array_len);
             break;
         
         case PinnedMemoryVectorAddition:
-            array_len = 1024 * 1024;
+            array_len = 1024 * 1024 * 256;
             chunk_len = MAX_BLOCK_DIM;
             printMemoryRequirements(array_len);
             pinnedMemoryAddition(array_len);
@@ -457,6 +463,7 @@ int main()
 
         case PageableMemoryVectorAdditionLarge: // chunked execution for very large array
             array_len = 1ULL * 1024 * 1024 * 512;
+            //printMemoryRequirements(array_len);
             pageableMemoryAdditionLarge(array_len);
             break;
         
